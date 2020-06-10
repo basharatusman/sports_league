@@ -1,3 +1,5 @@
-*
-*/
-!.gitignore
+# exclude everything
+profile_pics/*
+
+# exception to the rule
+!profile_pics/.gitignore
