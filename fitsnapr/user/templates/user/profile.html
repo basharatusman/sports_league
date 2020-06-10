@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+</head>
+
+<body>
+    <h1>UserProfile</h1>
+    <div class="media">
+        <h1>{{ user.username }}</h1>
+        <h1>{{ user.first_name}}</h1>
+        <h1>{{ user.last_name }}</h1>
+        <h1>{{ user.userprofile.phone_number }}</h1>
+        <h1>{{ user.email }}</h1>
+        <img src="{{ user.userprofile.profile_picture.url }}">
+        
+    </div>
+    <form action="{% url 'profile-view' %}" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <fieldset>
+            {{u_form}}
+        </fieldset>
+        <label>Phone Number</label>
+        <fieldset value="{{user.userprofile.phone_number}}">
+            {{p_form.phone_number}}
+        </fieldset>
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>
