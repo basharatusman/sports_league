@@ -23,11 +23,7 @@
         {% csrf_token %}
         <fieldset>
             {{u_form}}
-        </fieldset>
-        <label>Phone Number</label>
-        <fieldset value="{{user.userprofile.phone_number}}">
-            {{p_form.phone_number}}
-        </fieldset>
+            {{p_form}}
         <button type="submit">Update</button>
     </form>
 </body>

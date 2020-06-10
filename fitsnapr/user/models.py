@@ -18,11 +18,17 @@ class UserProfile(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        profile_pic = Image.open(self.profile_picture.path)
+
+        if profile_pic.height > 300 or profile_pic.width > 300:
+            output_size = (300, 300)
+            profile_pic.thumbnail(output_size)
+            profile_pic.save(self.profile_picture.path)
 
 
 class Address(models.Model):
-    address1 = models.TextField(max_length=254, blank=True)
-    address2 = models.TextField(max_length=254, blank=True)
+    address1 = models.CharField(max_length=254, blank=True)
+    address2 = models.CharField(max_length=254, blank=True)
     city = models.CharField(max_length=254, blank=True)
     provice = models.CharField(max_length=100, blank=True)
     post_code = models.CharField(max_length=10, blank=True)
