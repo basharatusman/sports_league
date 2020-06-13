@@ -47,7 +47,7 @@ class BillingAddress(Address):
         verbose_name_plural = 'Billing Address'
 
     def __str__(self):
-        return f"{self.userprofile.user_id}'s billing address"
+        return f"{self.userprofile.user.username}'s billing address"
 
 
 class ShippingAddress(Address):
@@ -57,4 +57,4 @@ class ShippingAddress(Address):
         verbose_name_plural = 'Shipping Address'
 
     def __str__(self):
-        return f"{self.userprofile.user_id}'s shipping address"
+        return f"{self.userprofile.user.username}'s shipping address"
