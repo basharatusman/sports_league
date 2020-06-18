@@ -10,12 +10,6 @@ class UserProfile(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)
 
-    class Meta:
-        verbose_name_plural = 'User Profiles'
-
-    def __str__(self):
-        return f'{self.user.username} profile'
-
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         profile_pic = Image.open(self.profile_picture.path)
@@ -25,6 +19,12 @@ class UserProfile(models.Model):
             profile_pic.thumbnail(output_size)
             profile_pic.save(self.profile_picture.path)
 
+    class Meta:
+        verbose_name_plural = 'User Profiles'
+
+    def __str__(self):
+        return f'{self.user.username} profile'
+
 
 class Address(models.Model):
     address1 = models.CharField(max_length=254, blank=True)
@@ -33,28 +33,28 @@ class Address(models.Model):
     provice = models.CharField(max_length=100, blank=True)
     post_code = models.CharField(max_length=10, blank=True)
 
-    class Meta:
-        verbose_name_plural = 'Address'
-
     def __str__(self):
         return self.post_code
 
+    class Meta:
+        verbose_name_plural = 'Address'
+
 
 class BillingAddress(Address):
-    userprofile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user_profile.user.username}'s billing address"
 
     class Meta:
         verbose_name_plural = 'Billing Address'
 
-    def __str__(self):
-        return f"{self.userprofile.user.username}'s billing address"
-
 
 class ShippingAddress(Address):
-    userprofile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user_profile.user.username}'s shipping address"
 
     class Meta:
         verbose_name_plural = 'Shipping Address'
-
-    def __str__(self):
-        return f"{self.userprofile.user.username}'s shipping address"

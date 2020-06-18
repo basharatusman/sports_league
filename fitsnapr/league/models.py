@@ -7,11 +7,11 @@ class Sport(models.Model):
     is_team_sport = models.BooleanField(default=True)
     date_added = models.DateField(auto_now_add=True)
 
-    class Meta:
-        verbose_name_plural = 'Sports'
-
     def __str__(self):
         return self.sport_name
+
+    class Meta:
+        verbose_name_plural = 'Sports'
 
 
 class Season(models.Model):
@@ -20,24 +20,38 @@ class Season(models.Model):
     season_end_date = models.DateField()
     is_active = models.BooleanField(default=True)
 
-    class Meta:
-        verbose_name_plural = 'Seasons'
-
     def __str__(self):
         return f"{self.sport.sport_name} season ending {self.season_end_date}"
+
+    class Meta:
+        verbose_name_plural = 'Seasons'
 
 
 class Schedule(models.Model):
     season = models.ForeignKey(Season, on_delete=models.SET_NULL, null=True)
-    schedule_name = models.CharField(max_length=30)
+    day_choices = [('Monday', "Monday"), ('Tuesday', "Tuesday"), ('Wednesday', "Wednesday"), ('Thursday', "Thursday"),
+                   ('Friday', "Fridayday"), ('Saturday', "Saturday"), ('Sunday', "Sunday")]
+    schedule_day = models.CharField(
+        max_length=30, choices=day_choices, default=1)
+    type_choices = [('Co-ed', 'Co-ed'), ("Men's", "Men's"), ("Women's", "Women's")]
+    schedule_type = models.CharField(
+        max_length=30, choices=type_choices, default=1)
+    compete_choices = [('Beginner', "Beginner"), ('Intermediate', 'Intermediate'),
+                       ('Advanced', 'Advanced')]
+    compete_type = models.CharField(
+        max_length=30, choices=compete_choices, default=1)
     team_limit = models.IntegerField(default=10)
-    schedule_description = models.TextField()
+    schedule_description = models.TextField(blank=True)
 
-    class Meta:
-        verbose_name_plural = 'Schedules'
+    @property
+    def schedule_name(self):
+        return (f'{self.schedule_day} {self.schedule_type} {self.compete_type}')
 
     def __str__(self):
         return self.schedule_name
+
+    class Meta:
+        verbose_name_plural = 'Schedules'
 
 
 class Team(models.Model):
@@ -45,9 +59,9 @@ class Team(models.Model):
         Schedule, on_delete=models.SET_NULL, null=True)
     player = models.ManyToManyField(UserProfile)
     team_name = models.CharField(max_length=50, default='')
-
-    class Meta:
-        pass
+    max_players = models.IntegerField(default=10)
+    min_players = models.IntegerField(default=5)
+    is_public = models.BooleanField(default=True)
 
     @property
     def team_status(self):
@@ -56,6 +70,9 @@ class Team(models.Model):
 
     def __str__(self):
         return self.team_name
+
+    class Meta:
+        verbose_name_plural = 'Teams'
 
 
 class GameLocation(models.Model):
@@ -66,11 +83,11 @@ class GameLocation(models.Model):
     province = models.CharField(max_length=50)
     post_code = models.CharField(max_length=10)
 
-    class Meta:
-        verbose_name_plural = 'GameLocations'
-
     def __str__(self):
         return self.location_name
+
+    class Meta:
+        verbose_name_plural = 'GameLocation'
 
 
 class Game(models.Model):
@@ -103,8 +120,8 @@ class Game(models.Model):
     def is_tied(self):
         return self.home_team_score == self.away_team_score
 
-        class Meta:
-            pass
-
     def __str__(self):
         return f"{self.home_team} vs {self.away_team} on {self.game_date} at {self.game_time}"
+
+        class Meta:
+            pass
