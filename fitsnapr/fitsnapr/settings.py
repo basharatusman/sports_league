@@ -20,12 +20,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '--57(fs5=$)$!(*eoidnr562ts6yitx!xbq2%suunwu)h7w7d)'
+SECRET_KEY = os.environ.get('DJ_SECRET_KEY')
+STRIPE_API_KEY = os.environ.get('STRIPE_API_KEY2')
+STRIPE_ENDPOINT_KEY = os.environ.get('STRIPE_ENDPOINT_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['19a58f2b4fc0.ngrok.io', '127.0.0.1']
 
 
 # Application definition
@@ -124,7 +127,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (os.path.join('static'), )
 
 LOGIN_REDIRECT_URL = 'home'
 

@@ -3,10 +3,22 @@ from league.models import Schedule
 from user.models import UserProfile
 
 
-class Package(models.Model):
+class Category(models.Model):
+    category_choices = [('League', 'Sports League'), ('Fitness', 'Online Fitness')]
+    category_name = models.CharField(max_length=30, choices=category_choices)
+
+    def __str__(self):
+        return self.category_name
+
+    class Meta:
+        verbose_name_plural = 'Catagories'
+
+
+class LeaguePackage(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
-    package_choices = [('Individual', 'Individual'), ('Team', 'Team')]
-    package_type = models.CharField(max_length=30, choices=package_choices)
+    package_choices = [('Ind', 'Individual'), ('Team', 'Team')]
+    package_type = models.CharField(max_length=15, choices=package_choices)
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
     @property
@@ -14,32 +26,35 @@ class Package(models.Model):
         return (f"{self.package_type} {self.schedule.schedule_name}")
 
     def __str__(self):
-        return (f"{self.package_type} {self.schedule.schedule_name}")
+        return (f"{self.package_name}")
 
     class Meta:
         verbose_name_plural = 'Packages'
 
 
-class OrderItem(models.Model):
-    package = models.ForeignKey(Package, on_delete=models.SET_NULL, null=True)
+class LeagueCart(models.Model):
+    user_profile = models.ForeignKey(
+        UserProfile, on_delete=models.SET_NULL, null=True)
+    league_package = models.ForeignKey(LeaguePackage, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=1, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.package.package_name
+        return self.league_package.package_name
 
     class Meta:
-        verbose_name_plural = 'Order Items'
+        verbose_name_plural = 'Cart'
 
 
-class Order(models.Model):
-    customer = models.ForeignKey(
+class LeagueOrder(models.Model):
+    user_profile = models.ForeignKey(
         UserProfile, on_delete=models.SET_NULL, null=True)
-    items = models.ManyToManyField(OrderItem)
-    date_ordered = models.DateTimeField()
-    
+    league_packages = models.ManyToManyField(LeagueCart)
+    ordered = models.BooleanField(default=False)
+    date_created = models.DateField(auto_now_add=True)
+
     def __str__(self):
-        return self.id
+        return f"{self.user_profile.user}'s order created {self.date_created}'"
 
     class Meta:
-        verbose_name_plural = 'Order'
+        verbose_name_plural = 'Orders'

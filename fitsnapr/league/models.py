@@ -57,7 +57,7 @@ class Schedule(models.Model):
 class Team(models.Model):
     schedule = models.ForeignKey(
         Schedule, on_delete=models.SET_NULL, null=True)
-    player = models.ManyToManyField(UserProfile)
+    player = models.ManyToManyField(UserProfile, through='TeamPlayer')
     team_name = models.CharField(max_length=50, default='')
     max_players = models.IntegerField(default=10)
     min_players = models.IntegerField(default=5)
@@ -75,6 +75,18 @@ class Team(models.Model):
         verbose_name_plural = 'Teams'
 
 
+class TeamPlayer(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
+    player = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+    date_joined = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.player.user.username} on {self.team}'
+
+    # class Meta:
+    #     unique_together = [['team', 'player']]
+
+
 class GameLocation(models.Model):
     location_name = models.CharField(max_length=50)
     address1 = models.CharField(max_length=100)
@@ -87,7 +99,7 @@ class GameLocation(models.Model):
         return self.location_name
 
     class Meta:
-        verbose_name_plural = 'GameLocation'
+        verbose_name_plural = 'Game Location'
 
 
 class Game(models.Model):

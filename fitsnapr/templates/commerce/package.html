@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package</title>
+</head>
+
+<body>
+    {% for package in packages %}
+    <li>{{package.package_name}}</li>
+    <a href="add-to-cart/{{package.id}}/">Add to Cart</a>
+    {% endfor %}
+</body>
+
+</html>
