@@ -15,7 +15,7 @@ class Category(models.Model):
 
 
 class LeaguePackage(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
     package_choices = [('Ind', 'Individual'), ('Team', 'Team')]
     package_type = models.CharField(max_length=15, choices=package_choices)
@@ -34,8 +34,8 @@ class LeaguePackage(models.Model):
 
 class LeagueCart(models.Model):
     user_profile = models.ForeignKey(
-        UserProfile, on_delete=models.SET_NULL, null=True)
-    league_package = models.ForeignKey(LeaguePackage, on_delete=models.SET_NULL, null=True)
+        UserProfile, on_delete=models.CASCADE)
+    league_package = models.ForeignKey(LeaguePackage, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
@@ -48,8 +48,8 @@ class LeagueCart(models.Model):
 
 class LeagueOrder(models.Model):
     user_profile = models.ForeignKey(
-        UserProfile, on_delete=models.SET_NULL, null=True)
-    league_packages = models.ManyToManyField(LeagueCart)
+        UserProfile, on_delete=models.CASCADE)
+    league_packages = models.ManyToManyField(LeagueCart, through='LeagueOrderPackage')
     ordered = models.BooleanField(default=False)
     date_created = models.DateField(auto_now_add=True)
 
@@ -58,3 +58,8 @@ class LeagueOrder(models.Model):
 
     class Meta:
         verbose_name_plural = 'Orders'
+
+
+class LeagueOrderPackage(models.Model):
+    league_order = models.ForeignKey(LeagueOrder, on_delete=models.CASCADE)
+    league_packages = models.ForeignKey(LeagueCart, on_delete=models.CASCADE)

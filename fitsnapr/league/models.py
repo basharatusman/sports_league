@@ -29,15 +29,16 @@ class Season(models.Model):
 
 class Schedule(models.Model):
     season = models.ForeignKey(Season, on_delete=models.SET_NULL, null=True)
-    day_choices = [('Monday', "Monday"), ('Tuesday', "Tuesday"), ('Wednesday', "Wednesday"), ('Thursday', "Thursday"),
-                   ('Friday', "Fridayday"), ('Saturday', "Saturday"), ('Sunday', "Sunday")]
+    day_choices = [('M', "Monday"), ('T', "Tuesday"), ('W', "Wednesday"), ('T', "Thursday"),
+                   ('F', "Friday"), ('S', "Saturday"), ('U', "Sunday")]
     schedule_day = models.CharField(
         max_length=30, choices=day_choices, default=1)
-    type_choices = [('Co-ed', 'Co-ed'), ("Men's", "Men's"), ("Women's", "Women's")]
+    type_choices = [('Co-ed', 'Co-ed'), ("Men's", "Men's"),
+                    ("Women's", "Women's")]
     schedule_type = models.CharField(
         max_length=30, choices=type_choices, default=1)
-    compete_choices = [('Beginner', "Beginner"), ('Intermediate', 'Intermediate'),
-                       ('Advanced', 'Advanced')]
+    compete_choices = [('Beg', "Beginner"), ('Int', 'Intermediate'),
+                       ('Adv', 'Advanced')]
     compete_type = models.CharField(
         max_length=30, choices=compete_choices, default=1)
     team_limit = models.IntegerField(default=10)
@@ -77,7 +78,8 @@ class Team(models.Model):
 
 class TeamPlayer(models.Model):
     team = models.ForeignKey(Team, on_delete=models.SET_NULL, null=True)
-    player = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True)
+    player = models.ForeignKey(
+        UserProfile, on_delete=models.SET_NULL, null=True)
     date_joined = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -136,4 +138,4 @@ class Game(models.Model):
         return f"{self.home_team} vs {self.away_team} on {self.game_date} at {self.game_time}"
 
         class Meta:
-            pass
+            unique_together = ['home_team', 'away_team']
