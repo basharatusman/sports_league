@@ -1,1 +1,1 @@
-web: gunicorn fitsnapr.wsgi 
+web: gunicorn fitsnapr.wsgi.py
