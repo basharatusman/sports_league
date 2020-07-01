@@ -28,7 +28,7 @@ STRIPE_ENDPOINT_KEY = os.environ.get('STRIPE_ENDPOINT_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJ_DEBUG')
+DEBUG = (os.environ.get('DJ_DEBUG') == 'True')
 
 ALLOWED_HOSTS = ['fitsnapr.herokuapp.com']
 
