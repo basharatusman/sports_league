@@ -11,14 +11,14 @@ class UserProfile(models.Model):
     phone_number = models.CharField(max_length=15, blank=True)
     stripe_customer = models.CharField(max_length=50, blank=True)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        profile_pic = Image.open(self.profile_picture.path)
+    # def save(self, *args, **kwargs):
+    #     super().save(*args, **kwargs)
+    #     profile_pic = Image.open(self.profile_picture.path)
 
-        if profile_pic.height > 300 or profile_pic.width > 300:
-            output_size = (300, 300)
-            profile_pic.thumbnail(output_size)
-            profile_pic.save(self.profile_picture.path)
+    #     if profile_pic.height > 300 or profile_pic.width > 300:
+    #         output_size = (300, 300)
+    #         profile_pic.thumbnail(output_size)
+    #         profile_pic.save(self.profile_picture.path)
 
     @property
     def full_name(self):

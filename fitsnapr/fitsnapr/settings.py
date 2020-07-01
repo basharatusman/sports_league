@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'league.apps.LeagueConfig',
     'api.apps.ApiConfig',
     'commerce.apps.CommerceConfig',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -129,12 +130,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join('static'), )
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_DEFAULT_ACL = None
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+
+STATIC_LOCATION = 'static'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+STATICFILES_STORAGE = 'fitsnapr.storage_backends.StaticStorage'
+
+MEDIA_LOCATION = 'media'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
+DEFAULT_FILE_STORAGE = 'fitsnapr.storage_backends.PublicMediaStorage'
+AWS_S3_FILE_OVERWRITE = False
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = (os.path.join('static'), )
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = 'home'
 
 LOGIN_URL = 'login'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'

@@ -18,14 +18,15 @@
         <h1>{{ user.email }}</h1>
         <h1>{{ user.userprofile.birth_date }}</h1>
         <img src="{{ user.userprofile.profile_picture.url }}">
-        
+
     </div>
     <form action="{% url 'profile-view' %}" enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         <fieldset>
             {{u_form}}
             {{p_form}}
-        <button type="submit">Update</button>
+            <button type="submit">Update</button>
     </form>
 </body>
+
 </html>
