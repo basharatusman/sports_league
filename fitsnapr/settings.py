@@ -140,6 +140,7 @@ AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 STATIC_LOCATION = 'static'
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
 STATICFILES_STORAGE = 'fitsnapr.storage_backends.StaticStorage'
+STATIC_ROOT = 'staticfiles'
 
 MEDIA_LOCATION = 'media'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
@@ -147,10 +148,8 @@ DEFAULT_FILE_STORAGE = 'fitsnapr.storage_backends.PublicMediaStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
 # STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join('static'), )
+# STATICFILES_DIRS = (os.path.join('static'), )
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MEDIA_URL = '/media/'
