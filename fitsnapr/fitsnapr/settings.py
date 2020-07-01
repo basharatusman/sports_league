@@ -144,7 +144,6 @@ STATICFILES_STORAGE = 'fitsnapr.storage_backends.StaticStorage'
 MEDIA_LOCATION = 'media'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
 DEFAULT_FILE_STORAGE = 'fitsnapr.storage_backends.PublicMediaStorage'
-AWS_S3_FILE_OVERWRITE = False
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
