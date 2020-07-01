@@ -4,3 +4,4 @@ media/*
 .pyc
 .pyo
 __pycache__/
+notes.txt

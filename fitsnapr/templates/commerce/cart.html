@@ -9,12 +9,14 @@
 
 <body>
     {% for item in order_items %}
-    <li>{{item.league_package.package_name}}</li>
-    <li>{{item.league_package.price}}</li>
-    <li>{{item.quantity}}</li>
+    <li>Package: {{item.league_package.package_name}}</li>
+    <li>Price: {{item.league_package.price}}</li>
+    <li>Quntity: {{item.quantity}}</li>
+    <li>Total: {{item.cart_item_total}}</li>
     <a href="{% url 'reduce-from-cart' id=item.league_package.id %}">Reduce Quantity</a>
     <a href="{% url 'remove-from-cart' id=item.league_package.id %}">Remove from Cart</a>
     {% endfor %}
+    <li>Total: {{order_total}}</li>
 </body>
 
 </html>

@@ -6,6 +6,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from user.models import UserProfile
 from league.models import Schedule, Team, TeamPlayer
+from commerce.models import LeagueCart, LeagueOrder
+import datetime
+from .utils import create_transaction
 
 stripe.api_key = settings.STRIPE_API_KEY
 endpoint_secret = settings.STRIPE_ENDPOINT_KEY
@@ -15,12 +18,31 @@ def api(request):
     return render(request, 'api/api.html')
 
 
-def create_payment(request):
-    data = json.loads(request.body)
-    print(request.user)
+def create_payment(request, *args, **kwargs):
+    order = LeagueCart.cart_manager.get_cart_items(request)
+    description = f'{request.user} {datetime.datetime.now()}'
+    total = LeagueCart.cart_manager.get_cart_total(request, order)
+    amount = int(total) * 100
+    metadata = {
+        'orderitems': f'{list(item.league_package.package_name for item in order)}'}
+    stripe_customer = request.user.userprofile.stripe_customer
+
+    if stripe_customer != '':
+        customer = stripe_customer
+        print(customer)
+
+    else:
+        customer_name = request.user.userprofile.full_name
+        customer = stripe.Customer.create(
+            name=customer_name, email=request.user.email, description=customer_name)
+        user_profile = UserProfile.objects.get(id=request.user.userprofile.id)
+        user_profile.stripe_customer = customer.get('id')
+        user_profile.save()
+
     if request.method == 'POST':
         try:
-            intent = stripe.PaymentIntent.create(amount=500, currency='cad')
+            intent = stripe.PaymentIntent.create(
+                amount=amount, currency='cad', customer=customer, description=description, setup_future_usage='off_session', metadata=metadata)
             return JsonResponse({'clientSecret': intent['client_secret']})
         except Exception as e:
             return JsonResponse(status=404, data={'status': 'false', 'message': str(e)})
@@ -42,7 +64,7 @@ def stripe_webhook(request):
 
     if event.type == 'payment_intent.succeeded':
         payment_intent = event.data.object
-        print('payment was successful')
+        create_transaction(payment_intent)  # celery  figure out how to get user and order
 
     elif event.type == 'payment_method.attached':
         payment_method = event.data.object
@@ -50,7 +72,7 @@ def stripe_webhook(request):
 
     elif event.type == 'payment_intent.created':
         payment_intent = event.data.object
-        print('payment intent created')
+        print(payment_intent)
 
     else:
         return HttpResponse(status=400)

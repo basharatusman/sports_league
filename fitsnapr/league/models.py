@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import UniqueConstraint, CheckConstraint, Q
 from user.models import UserProfile
+from django.core.exceptions import ValidationError
 
 
 class Sport(models.Model):
@@ -85,8 +87,8 @@ class TeamPlayer(models.Model):
     def __str__(self):
         return f'{self.player.user.username} on {self.team}'
 
-    # class Meta:
-    #     unique_together = [['team', 'player']]
+    class Meta:
+        unique_together = ['team', 'player']
 
 
 class GameLocation(models.Model):
@@ -116,6 +118,13 @@ class Game(models.Model):
     home_team_score = models.IntegerField(default=0)
     away_team_score = models.IntegerField(default=0)
 
+    def save(self, *args, **kwargs):
+        if self.home_team == self.away_team:
+            raise ValidationError(message='teams must be unique')
+
+        else:
+            super(Game, self).save(*args, **kwargs)
+
     @property
     def winning_team(self):
         if self.home_team_score != self.away_team_score:
@@ -137,5 +146,5 @@ class Game(models.Model):
     def __str__(self):
         return f"{self.home_team} vs {self.away_team} on {self.game_date} at {self.game_time}"
 
-        class Meta:
-            unique_together = ['home_team', 'away_team']
+    class Meta:
+        verbose_name_plural = 'Game'

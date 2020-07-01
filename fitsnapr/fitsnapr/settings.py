@@ -29,7 +29,7 @@ STRIPE_ENDPOINT_KEY = os.environ.get('STRIPE_ENDPOINT_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['19a58f2b4fc0.ngrok.io', '127.0.0.1']
+ALLOWED_HOSTS = ['b72664004cf6.ngrok.io', '127.0.0.1']
 
 
 # Application definition

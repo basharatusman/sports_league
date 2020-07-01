@@ -9,6 +9,7 @@ class UserProfile(models.Model):
         default='default.jpg', upload_to='profile_pics')
     birth_date = models.DateField(null=True, blank=True)
     phone_number = models.CharField(max_length=15, blank=True)
+    stripe_customer = models.CharField(max_length=50, blank=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -18,6 +19,10 @@ class UserProfile(models.Model):
             output_size = (300, 300)
             profile_pic.thumbnail(output_size)
             profile_pic.save(self.profile_picture.path)
+
+    @property
+    def full_name(self):
+        return f'{self.user.first_name} {self.user.last_name}'
 
     class Meta:
         verbose_name_plural = 'User Profiles'

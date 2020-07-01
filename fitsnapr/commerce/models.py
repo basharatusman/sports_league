@@ -1,6 +1,7 @@
 from django.db import models
 from league.models import Schedule
 from user.models import UserProfile
+from . managers import LeagueCartManager
 
 
 class Category(models.Model):
@@ -39,6 +40,13 @@ class LeagueCart(models.Model):
     quantity = models.IntegerField(default=1, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
+    objects = models.Manager()
+    cart_manager = LeagueCartManager()
+
+    @property
+    def cart_item_total(self):
+        return self.league_package.price * self.quantity
+
     def __str__(self):
         return self.league_package.package_name
 
@@ -63,3 +71,13 @@ class LeagueOrder(models.Model):
 class LeagueOrderPackage(models.Model):
     league_order = models.ForeignKey(LeagueOrder, on_delete=models.CASCADE)
     league_packages = models.ForeignKey(LeagueCart, on_delete=models.CASCADE)
+
+
+class Transaction(models.Model):
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True)
+    order = models.ForeignKey(LeagueOrder, on_delete=models.SET_NULL, null=True)
+    stripe_charge_id = models.CharField(max_length=50, blank=True)
+    amount_charged = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    last_digits = models.CharField(max_length=4, blank=True)
+    network = models.CharField(max_length=20, blank=True)
+    payment_intent = models.CharField(max_length=50, blank=True)
