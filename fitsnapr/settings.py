@@ -11,8 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-import django_heroku
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +28,7 @@ STRIPE_ENDPOINT_KEY = os.environ.get('STRIPE_ENDPOINT_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get('DJ_DEBUG') == 'True')
 
-ALLOWED_HOSTS = ['fitsnapr.herokuapp.com']
+ALLOWED_HOSTS = ['fitsnapr.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -158,5 +156,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = 'home'
 
 LOGIN_URL = 'login'
-
-django_heroku.settings(locals())
