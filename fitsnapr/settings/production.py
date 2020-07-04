@@ -1,6 +1,5 @@
 from .base import *
 import os
-import django_heroku
 
 DEBUG = False
 
@@ -23,5 +22,3 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
 DEFAULT_FILE_STORAGE = 'fitsnapr.storage_backends.PublicMediaStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-django_heroku.settings(locals(), staticfiles=False)
