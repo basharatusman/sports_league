@@ -1,7 +1,7 @@
 from .base import *
 import os
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['fitsnapr.herokuapp.com', '127.0.0.1']
 
@@ -20,8 +20,6 @@ STATIC_LOCATION = 'static'
 STATIC_URL = f'https://{CLOUDFRONT_DOMAIN}/{STATIC_LOCATION}/'
 STATICFILES_STORAGE = 'fitsnapr.storage_backends.StaticStorage'
 STATIC_ROOT = 'static'
-# STATICFILES_DIRS = (os.path.join('static'), )
-
 
 MEDIA_LOCATION = 'media'
 MEDIA_URL = f'https://{CLOUDFRONT_DOMAIN}/{MEDIA_LOCATION}/'
