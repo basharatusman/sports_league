@@ -13,13 +13,14 @@ AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 CLOUDFRONT_DOMAIN = os.environ.get('CLOUDFRONT_DOMAIN')
 CLOUDFRONT_ID = os.environ.get('CLOUDFRONT_ID')
+
 AWS_S3_CUSTOM_DOMAIN = CLOUDFRONT_DOMAIN
 
 STATIC_LOCATION = 'static'
 STATIC_URL = f'https://{CLOUDFRONT_DOMAIN}/{STATIC_LOCATION}/'
 STATICFILES_STORAGE = 'fitsnapr.storage_backends.StaticStorage'
-STATIC_ROOT = 'staticfiles'
-STATICFILES_DIRS = (os.path.join('static'), )
+STATIC_ROOT = 'static'
+# STATICFILES_DIRS = (os.path.join('static'), )
 
 
 MEDIA_LOCATION = 'media'
