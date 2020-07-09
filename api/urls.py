@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path, include
 from .views import api, create_payment, stripe_webhook, add_player_to_team, add_team_to_schedule
+from .serializer_views import UserList, UserDetail
 
 
 urlpatterns = [
@@ -7,4 +8,6 @@ urlpatterns = [
     path('create-payment-intent/', create_payment, name='create-payment-intent'),
     path('stripe-webhook/', stripe_webhook, name='stripe-webhook'),
     path('add/', add_team_to_schedule, name='add'),
+    path('user/', UserList.as_view()),
+    path('user/<int:pk>/', UserDetail.as_view()),
 ]

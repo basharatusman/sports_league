@@ -131,3 +131,5 @@ def add_team_to_schedule(request, *args, **kwargs):
     TeamPlayer(team=team, player=user).save()
 
     return HttpResponse('success')
+
+
