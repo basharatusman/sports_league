@@ -10,4 +10,6 @@ urlpatterns = [
     path('add/', add_team_to_schedule, name='add'),
     path('user/', UserList.as_view()),
     path('user/<int:pk>/', UserDetail.as_view()),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls'))
 ]
