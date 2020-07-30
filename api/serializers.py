@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from user import models
+from user.models import UserProfile
 from django.contrib.auth.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = User
         # extra_kwargs = {'password': {'write_only': True}}
@@ -25,3 +26,9 @@ class UserSerializer(serializers.ModelSerializer):
                 setattr(instance, attr, value)
         instance.save()
         return instance
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = '__all__'
